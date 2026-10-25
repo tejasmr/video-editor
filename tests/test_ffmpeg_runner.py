@@ -222,9 +222,18 @@ class TestFFmpegRunner(unittest.TestCase):
     def test_find_binary_windows_candidate(self):
         with patch.dict(os.environ, {}, clear=True), \
              patch("shutil.which", return_value=None), \
+             patch("os.name", "nt"), \
              patch("os.path.isfile", side_effect=lambda p: str(p) == r"C:\ffmpeg\bin\ffmpeg.exe"):
             found = FFmpegRunner._find_binary("ffmpeg")
             self.assertEqual(found, r"C:\ffmpeg\bin\ffmpeg.exe")
+
+    def test_find_binary_posix_candidate(self):
+        with patch.dict(os.environ, {}, clear=True), \
+             patch("shutil.which", return_value=None), \
+             patch("os.name", "posix"), \
+             patch("os.path.isfile", side_effect=lambda p: str(p) == "/usr/bin/ffmpeg"):
+            found = FFmpegRunner._find_binary("ffmpeg")
+            self.assertEqual(found, "/usr/bin/ffmpeg")
 
     def test_read_mp4_duration_atom_zero_data_size(self):
         # Create an atom with size 8 (so data_size is 0)

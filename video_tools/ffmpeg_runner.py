@@ -56,17 +56,26 @@ class FFmpegRunner:
             except Exception:
                 pass
 
-        # Check common Windows directories
-        candidates = [
-            Path(r"C:\ffmpeg\bin") / f"{name}.exe",
-            Path(r"C:\ProgramData\chocolatey\bin") / f"{name}.exe",
-            Path(r"C:\Program Files\ffmpeg\bin") / f"{name}.exe",
-            Path(r"C:\tools\ffmpeg\bin") / f"{name}.exe",
-            Path(os.path.expanduser(r"~\AppData\Local\Microsoft\WinGet\Packages")) / f"{name}.exe",
-        ]
+        # Check common platform directories
+        candidates: List[str] = []
+        if os.name == "nt":
+            candidates.extend([
+                rf"C:\ffmpeg\bin\{name}.exe",
+                rf"C:\ProgramData\chocolatey\bin\{name}.exe",
+                rf"C:\Program Files\ffmpeg\bin\{name}.exe",
+                rf"C:\tools\ffmpeg\bin\{name}.exe",
+                os.path.join(os.path.expanduser(r"~\AppData\Local\Microsoft\WinGet\Packages"), f"{name}.exe"),
+            ])
+        else:
+            candidates.extend([
+                f"/usr/bin/{name}",
+                f"/usr/local/bin/{name}",
+                f"/opt/homebrew/bin/{name}",
+            ])
+
         for c in candidates:
-            if c.is_file():
-                return str(c)
+            if os.path.isfile(c):
+                return c
 
         return None
 

@@ -212,6 +212,14 @@ class TestCLI(unittest.TestCase):
             probe_video.main()
             self.assertIn("Warning: File not found", fake_err.getvalue())
 
+    def test_package_exports(self):
+        import video_tools
+        self.assertEqual(video_tools.__version__, "1.0.0")
+        self.assertTrue(hasattr(video_tools, "VideoSplitter"))
+        self.assertTrue(hasattr(video_tools, "VideoMerger"))
+        self.assertTrue(hasattr(video_tools, "FFmpegRunner"))
+        self.assertTrue(hasattr(video_tools, "parse_timestamp"))
+
 
 if __name__ == "__main__":
     unittest.main()

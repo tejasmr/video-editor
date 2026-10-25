@@ -144,5 +144,11 @@ pytest
 pytest --cov=video_tools --cov=scripts --cov-report=term-missing
 ```
 
-- **59 unit tests**
+- **65 unit tests**
 - **100% statement coverage**
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

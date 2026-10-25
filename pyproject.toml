@@ -7,10 +7,34 @@ name = "video-editor"
 version = "1.0.0"
 description = "Deterministic video editing tools and agentic skills for splitting and merging videos."
 readme = "README.md"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Tejas M R", email = "tejasmr@outlook.com" }
+]
+keywords = ["video", "ffmpeg", "video-editor", "agentic-ai", "cli", "antigravity"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Multimedia :: Video",
+    "Topic :: Multimedia :: Video :: Non-Linear Editor",
+]
 requires-python = ">=3.9"
 dependencies = [
     "imageio-ffmpeg>=0.5.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/tejasmr/video-editor"
+Repository = "https://github.com/tejasmr/video-editor.git"
+Issues = "https://github.com/tejasmr/video-editor/issues"
 
 [project.optional-dependencies]
 dev = [
@@ -40,4 +64,3 @@ exclude_lines = [
     "raise NotImplementedError",
     "pass",
 ]
-

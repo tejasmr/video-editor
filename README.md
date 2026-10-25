@@ -1,5 +1,8 @@
 # Deterministic Video Editor Agent & Skills
 
+[![CI](https://github.com/tejasmr/video-editor/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/tejasmr/video-editor/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/tejasmr/video-editor/branch/main/graph/badge.svg)](https://codecov.io/gh/tejasmr/video-editor)
+
 An agentic video editing toolkit designed for **Google Antigravity**.
 
 ---

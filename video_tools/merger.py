@@ -159,6 +159,7 @@ class VideoMerger:
                 if f_ret != 0:
                     raise RuntimeError(f"FFmpeg merge failed: {f_err or stderr}")
                 cmd_repr = "ffmpeg " + " ".join(fc_args)
+                retcode = f_ret
             else:
                 raise RuntimeError(f"FFmpeg merge failed: {stderr}")
 
@@ -168,7 +169,7 @@ class VideoMerger:
             except Exception:
                 pass
 
-        status = "success" if (dry_run or out_file.exists()) else "failed"
+        status = "success" if (dry_run or retcode == 0 or out_file.exists()) else "failed"
         action_word = "Planned merge of" if dry_run else "Successfully merged"
         msg = f"{action_word} {len(ordered_inputs)} video file(s) into {out_file.name}"
 

@@ -120,6 +120,18 @@ class TestCLI(unittest.TestCase):
             self.assertIn("VIDEO MERGE SUMMARY", output)
             self.assertIn("custom_merged.mp4", output)
 
+    def test_merge_cli_with_segments_dry_run(self):
+        with patch("sys.argv", [
+            "merge_videos.py",
+            "-i", "clip1.mp4", "clip2.mp4",
+            "-s", "0:00-1:30", "full",
+            "--dry-run"
+        ]), patch("sys.stdout", new=io.StringIO()) as fake_out:
+            merge_videos.main()
+            output = fake_out.getvalue()
+            self.assertIn("VIDEO MERGE SUMMARY", output)
+            self.assertIn("00:00-01:30", output)
+
     def test_merge_cli_file_not_found(self):
         with patch("sys.argv", [
             "merge_videos.py",

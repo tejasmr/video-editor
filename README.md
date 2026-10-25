@@ -94,16 +94,23 @@ python scripts/split_video.py --input "path/to/video.mp4" --segments 0:00-7:29 7
   - `--reencode`: Force re-encoding instead of stream copy.
 
 ### 2. Video Merging (`scripts/merge_videos.py` or `video-merge`)
-Concatenates multiple videos in the exact sequence specified:
+Concatenates multiple videos in the exact sequence specified. Supports optional segment slicing per input video (defaulting to full video if omitted):
 
 ```powershell
-python scripts/merge_videos.py --inputs "take203.mp4" "take130.mp4" "take054.mp4" --output "merged.mp4"
+# Merge full videos
+python scripts/merge_videos.py --inputs "take203.mp4" "take130.mp4" --output "merged.mp4"
+
+# Merge specific segments from each video (use 'full' or omit to use whole video)
+python scripts/merge_videos.py --inputs "part1.mp4" "part2.mp4" --segments "0:00-1:30" "full" --output "merged.mp4"
 ```
 
+- Accepts optional `--segments` corresponding 1-to-1 with `--inputs` (use `full` or omit to keep entire input).
 - Uses fast stream copy (`-c copy`) via FFmpeg concat demuxer.
 - Automatically falls back to `filter_complex` re-encoding if video streams have different codecs or resolutions.
 - Options:
-  - `--dry-run`: Preview concat manifest and FFmpeg commands without executing.
+  - `--segments`: Segment ranges per input file (e.g. `0:00-1:30`, `full`). Defaults to full videos if omitted.
+  - `--dry-run`: Preview concat manifest, slicing steps, and FFmpeg commands without executing.
+  - `--reencode`: Force re-encoding instead of stream copy.
 
 ### 3. Video Probing (`scripts/probe_video.py` or `video-probe`)
 Inspects duration, resolution, framerate, and audio/video codecs:

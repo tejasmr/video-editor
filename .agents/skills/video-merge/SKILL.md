@@ -8,13 +8,14 @@ description: Deterministically merge multiple video files into a single video ac
 Use this skill when the user requests merging multiple videos in a particular order or matching files by duration/description.
 
 ## Architectural Role of the Agent
-The Python script [`merge_videos.py`](../../../scripts/merge_videos.py) is a **pure deterministic execution engine** that accepts an explicit, pre-ordered list of `--inputs` (`path1 path2 ...`).
+The Python script [`merge_videos.py`](../../../scripts/merge_videos.py) is a **pure deterministic execution engine** that accepts an explicit, pre-ordered list of `--inputs` (`path1 path2 ...`) and optional `--segments` (`segment1 segment2 ...`).
 
 **Your role as the AI Agent:**
 1. **Probe Files When Needed**: If the user refers to files by duration (e.g. "1.41 file", "2:03 1st, 1:30 2nd"), run [`probe_video.py`](../../../scripts/probe_video.py) to inspect the duration of all candidate video paths.
 2. **Reason & Match**: Map the user's descriptions to the probed video paths and order them into an exact sequence (`#1, #2, #3`).
-3. **Clarify Ambiguities**: If multiple files match a duration, or if a described duration doesn't exist, **ask the user for clarification before executing**.
-4. **Execute Deterministically**: Invoke `merge_videos.py` passing the ordered paths to `--inputs`.
+3. **Handle Slices / Keep Segments**: If the user asks to merge specific portions of videos (e.g. "first 30s of file A and whole file B"), translate each portion into a segment string (e.g. `"0:00-0:30" "full"`).
+4. **Clarify Ambiguities**: If multiple files match a duration, or if a described duration doesn't exist, **ask the user for clarification before executing**.
+5. **Execute Deterministically**: Invoke `merge_videos.py` passing the ordered paths to `--inputs` and any segments to `--segments`.
 
 ---
 
@@ -57,11 +58,26 @@ This returns the exact duration and format of each file:
   3. 3rd: file with duration 0:54 (`fileA.mp4`)
   4. Ordered sequence: `fileB.mp4`, `fileC.mp4`, `fileA.mp4`
 
+- **Prompt Example 3 (With Segment Slices)**:
+  ```text
+  merge first 1 minute of video1.mp4 with the full video2.mp4
+  ```
+  1. Input 1: `video1.mp4`, segment: `0:00-1:00`
+  2. Input 2: `video2.mp4`, segment: `full`
+  3. Run:
+     ```powershell
+     python scripts/merge_videos.py --inputs "video1.mp4" "video2.mp4" --segments "0:00-1:00" "full" --output "merged.mp4"
+     ```
+
 ### Step 3: Run Deterministic Merge
-Invoke `merge_videos.py` with the ordered file paths:
+Invoke `merge_videos.py` with the ordered file paths (and optional `--segments`):
 
 ```powershell
+# Full videos
 python scripts/merge_videos.py --inputs "fileB.mp4" "fileC.mp4" "fileA.mp4" --output "merged.mp4"
+
+# With segment slicing (use 'full' for whole videos)
+python scripts/merge_videos.py --inputs "fileB.mp4" "fileC.mp4" --segments "0:00-1:00" "full" --output "merged.mp4"
 ```
 
 ### Step 4: Verification & Report

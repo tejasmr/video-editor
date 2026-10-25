@@ -23,6 +23,11 @@ def main():
         help="List of input video file paths in the exact concatenation order."
     )
     parser.add_argument(
+        "--segments", "-s",
+        nargs="+",
+        help="Optional segment intervals for each input file (e.g. 0:00-1:30 2:00-3:15 or 'full'). Defaults to 'full'."
+    )
+    parser.add_argument(
         "--output", "-o",
         help="Path for the output merged video file (defaults to '<dir>/merged_<N>_files.mp4')."
     )
@@ -56,6 +61,7 @@ def main():
     try:
         result = merger.merge(
             video_paths=input_paths,
+            segments=args.segments,
             output_path=args.output,
             reencode=args.reencode,
             dry_run=args.dry_run
@@ -76,7 +82,8 @@ def main():
         print(f"Message:        {result.message}")
         print("Ordered Sequence:")
         for inp in result.ordered_inputs:
-            print(f"  #{inp.position}: {inp.path} [duration: {inp.duration_formatted}]")
+            seg_info = f" [segment: {inp.segment_formatted}]" if inp.segment_formatted != "full" else ""
+            print(f"  #{inp.position}: {inp.path}{seg_info} [duration: {inp.duration_formatted}]")
         if args.dry_run:
             print(f"Command:        {result.ffmpeg_command}")
         print("=" * 60)

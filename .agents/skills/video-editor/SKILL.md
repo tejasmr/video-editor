@@ -19,5 +19,5 @@ This skill guides the AI agent in interpreting human video editing prompts, extr
 
 ## Tools Reference
 - [split_video.py](../../../scripts/split_video.py): Accepts `--input <path>` and `--segments <start-end ...>`.
-- [merge_videos.py](../../../scripts/merge_videos.py): Accepts `--inputs <ordered_paths ...>` and optional `--output`.
+- [merge_videos.py](../../../scripts/merge_videos.py): Accepts `--inputs <ordered_paths ...>`, optional `--segments <segment ...>`, and optional `--output`.
 - [probe_video.py](../../../scripts/probe_video.py): Inspects duration and codecs of files.

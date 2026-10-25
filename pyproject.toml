@@ -32,3 +32,4 @@ include = ["video_tools*", "scripts*"]
 pythonpath = ["."]
 testpaths = ["tests"]
 addopts = "-v"
+
